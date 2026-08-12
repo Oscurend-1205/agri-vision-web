@@ -400,11 +400,7 @@
 
           <!-- DUAL CONTROL BUTTONS -->
           <div class="camera-controls">
-            <button
-              id="flashBtn"
-              class="btn-action"
-              onclick="toggleFlash()"
-            >
+            <button id="flashBtn" class="btn-action" onclick="toggleFlash()">
               <i class="fa-solid fa-lightbulb"></i>
               <span id="btnText">Flash: OFF</span>
             </button>
@@ -424,26 +420,26 @@
         <div class="panel-card">
           <div class="panel-header">
             <div class="panel-title">
-              <i class="fa-solid fa-robot"></i> Kontrol Lengan Robot (4 Servo)
+              <i class="fa-solid fa-robot"></i> Kontrol Lengan Robot (4 Servo via DevKit)
             </div>
-            <span class="tag-chip">I2C / PCA9685 Driver</span>
+            <span class="tag-chip">ESP32 DevKit V1</span>
           </div>
 
           <div class="servo-grid">
             <div class="servo-card">
-              <div class="servo-label">Base (Poros): <span id="valBase">90°</span></div>
+              <div class="servo-label">Base (GPIO 12): <span id="valBase">90°</span></div>
               <input type="range" class="servo-slider" id="sliderBase" min="0" max="180" value="90" oninput="updateServo('Base', this.value)">
             </div>
             <div class="servo-card">
-              <div class="servo-label">Shoulder (Bahu): <span id="valShoulder">90°</span></div>
+              <div class="servo-label">Shoulder (GPIO 14): <span id="valShoulder">90°</span></div>
               <input type="range" class="servo-slider" id="sliderShoulder" min="0" max="180" value="90" oninput="updateServo('Shoulder', this.value)">
             </div>
             <div class="servo-card">
-              <div class="servo-label">Elbow (Siku): <span id="valElbow">90°</span></div>
+              <div class="servo-label">Elbow (GPIO 27): <span id="valElbow">90°</span></div>
               <input type="range" class="servo-slider" id="sliderElbow" min="0" max="180" value="90" oninput="updateServo('Elbow', this.value)">
             </div>
             <div class="servo-card">
-              <div class="servo-label">Gripper (Jepit): <span id="valGripper">90°</span></div>
+              <div class="servo-label">Gripper (GPIO 13): <span id="valGripper">90°</span></div>
               <input type="range" class="servo-slider" id="sliderGripper" min="0" max="180" value="90" oninput="updateServo('Gripper', this.value)">
             </div>
           </div>
@@ -513,9 +509,7 @@
             </div>
             <div class="accuracy-text">
               <span>Tingkat Kepercayaan (Akurasi)</span>
-              <strong id="akurasiText" style="color: var(--accent-green)"
-                >0.00%</strong
-              >
+              <strong id="akurasiText" style="color: var(--accent-green)">0.00%</strong>
             </div>
           </div>
 
@@ -523,7 +517,7 @@
           <table class="info-table">
             <tr>
               <td class="td-label">
-                <i class="fa-solid fa-microchip"></i> Node Sensor & Display
+                <i class="fa-solid fa-microchip"></i> Node Sensor & Robot Arm
               </td>
               <td class="td-val">ESP32 DevKit V1</td>
             </tr>
@@ -657,8 +651,8 @@
           document.getElementById("btnModeOFF").style.border     = (mode === "off") ? "2px solid #ef4444" : "1px solid var(--border-color)";
           
           const modeTag = document.getElementById("modeTag");
-          if (mode === "predict") modeTag.innerText = "Mode: AI Predict (QVGA)";
-          else if (mode === "cctv") modeTag.innerText = "Mode: CCTV Fast (QQVGA)";
+          if (mode === "predict") modeTag.innerText = "Mode: AI Predict";
+          else if (mode === "cctv") modeTag.innerText = "Mode: CCTV Fast (Robot Active)";
           else modeTag.innerText = "Mode: Kamera Nonaktif (OFF)";
 
         } catch (err) {
@@ -670,16 +664,19 @@
         }
       }
 
-      // Ganti Mode Kamera (Predict / CCTV / OFF)
+      // Ganti Mode Kamera (Predict / CCTV / OFF) - Memakai URLSearchParams
       async function setCameraMode(mode) {
         try {
-          let formData = new FormData();
-          formData.append("mode", mode);
+          let params = new URLSearchParams();
+          params.append("mode", mode);
 
           await fetch(`${API_BASE_URL}/set-camera-mode`, {
             method: "POST",
-            headers: { "ngrok-skip-browser-warning": "true" },
-            body: formData
+            headers: { 
+              "ngrok-skip-browser-warning": "true",
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: params
           });
           fetchStatus();
         } catch (err) {
@@ -702,23 +699,26 @@
         }
       }
 
-      // Update Slider Servo dengan Debounce
+      // Update Slider Servo dengan Debounce & URLSearchParams
       function updateServo(name, val) {
         document.getElementById(`val${name}`).innerText = val + "°";
 
         clearTimeout(servoDebounceTimer);
         servoDebounceTimer = setTimeout(async () => {
           try {
-            let formData = new FormData();
-            formData.append("base", document.getElementById("sliderBase").value);
-            formData.append("shoulder", document.getElementById("sliderShoulder").value);
-            formData.append("elbow", document.getElementById("sliderElbow").value);
-            formData.append("gripper", document.getElementById("sliderGripper").value);
+            let params = new URLSearchParams();
+            params.append("base", document.getElementById("sliderBase").value);
+            params.append("shoulder", document.getElementById("sliderShoulder").value);
+            params.append("elbow", document.getElementById("sliderElbow").value);
+            params.append("gripper", document.getElementById("sliderGripper").value);
 
             await fetch(`${API_BASE_URL}/set-servo`, {
               method: "POST",
-              headers: { "ngrok-skip-browser-warning": "true" },
-              body: formData
+              headers: { 
+                "ngrok-skip-browser-warning": "true",
+                "Content-Type": "application/x-www-form-urlencoded"
+              },
+              body: params
             });
           } catch (err) {
             console.error("Gagal mengupdate posisi servo:", err);
