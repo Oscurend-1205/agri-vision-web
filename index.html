@@ -544,37 +544,58 @@
     </div>
 
     <script>
-      // BASE URL Cloudflare Tunnel Anda
-// Ganti ke URL Ngrok Baru Anda
+      // URL Ngrok Tunnel Aktif
       const API_BASE_URL = "https://swooned-brigade-ludicrous.ngrok-free.dev";
 
       const imgElement = document.getElementById("streamImg");
 
-      function reloadImage() {
-        imgElement.src = API_BASE_URL + "/video_feed?t=" + new Date().getTime();
+      // Reload Stream Visual dengan Header Bypass Peringatan Ngrok
+      async function reloadImage() {
+        try {
+          const response = await fetch(
+            API_BASE_URL + "/video_feed?t=" + new Date().getTime(),
+            {
+              headers: {
+                "ngrok-skip-browser-warning": "true",
+              },
+            },
+          );
+
+          if (!response.ok) throw new Error("Gagal mengambil frame gambar");
+
+          const blob = await response.blob();
+
+          // Bebaskan memori URL Blob lama
+          if (imgElement.src && imgElement.src.startsWith("blob:")) {
+            URL.revokeObjectURL(imgElement.src);
+          }
+
+          imgElement.src = URL.createObjectURL(blob);
+          setTimeout(reloadImage, 100);
+        } catch (err) {
+          console.error("Video feed error:", err);
+          setTimeout(reloadImage, 1000);
+        }
       }
 
-      imgElement.onload = function () {
-        setTimeout(reloadImage, 100);
-      };
-
-      imgElement.onerror = function () {
-        setTimeout(reloadImage, 1000);
-      };
-
+      // Polling Telemetri & Status AI dengan Header Bypass Ngrok
       async function fetchStatus() {
         try {
-          let res = await fetch(`${API_BASE_URL}/get-flash`);
+          let res = await fetch(`${API_BASE_URL}/get-flash`, {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+            },
+          });
           let data = await res.json();
 
-          // Update AI
+          // Update Diagnosa AI
           const penyakit = data.prediksi || "Menunggu Kamera...";
           const akurasi = data.akurasi || "0.00%";
 
           document.getElementById("penyakitText").innerText = penyakit;
           document.getElementById("akurasiText").innerText = akurasi;
 
-          // Update Sensor Metrics dari DevKit
+          // Update Telemetri Sensor dari DevKit
           document.getElementById("valTemp").innerText =
             (data.temp || "--") + " °C";
           document.getElementById("valHum").innerText =
@@ -582,7 +603,7 @@
           document.getElementById("valDist").innerText =
             (data.dist || "--") + " cm";
 
-          // Progress Bar
+          // Progress Bar Akurasi
           const numAccuracy = parseFloat(akurasi.replace("%", "")) || 0;
           document.getElementById("accuracyBar").style.width =
             numAccuracy + "%";
@@ -613,9 +634,15 @@
         }
       }
 
+      // Tombol Kontrol Flash
       async function toggleFlash() {
         try {
-          await fetch(`${API_BASE_URL}/toggle-flash`, { method: "POST" });
+          await fetch(`${API_BASE_URL}/toggle-flash`, {
+            method: "POST",
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+            },
+          });
           fetchStatus();
         } catch (err) {
           console.error("Gagal mengubah status flash:", err);
