@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard Enterprise - Dual ESP32 AI Leaf Diagnostics</title>
+    <title>Dashboard Enterprise - Dual ESP32 AI Leaf Diagnostics & Robot Arm</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -116,18 +116,9 @@
       }
 
       @keyframes pulse {
-        0% {
-          transform: scale(0.95);
-          opacity: 0.7;
-        }
-        50% {
-          transform: scale(1.2);
-          opacity: 1;
-        }
-        100% {
-          transform: scale(0.95);
-          opacity: 0.7;
-        }
+        0% { transform: scale(0.95); opacity: 0.7; }
+        50% { transform: scale(1.2); opacity: 1; }
+        100% { transform: scale(0.95); opacity: 0.7; }
       }
 
       .dashboard-grid {
@@ -138,9 +129,7 @@
         margin: 0 auto;
       }
       @media (max-width: 1024px) {
-        .dashboard-grid {
-          grid-template-columns: 1fr;
-        }
+        .dashboard-grid { grid-template-columns: 1fr; }
       }
 
       .panel-card {
@@ -166,9 +155,7 @@
         align-items: center;
         gap: 10px;
       }
-      .panel-title i {
-        color: var(--accent-blue);
-      }
+      .panel-title i { color: var(--accent-blue); }
 
       .video-container {
         position: relative;
@@ -206,36 +193,61 @@
 
       .camera-controls {
         display: flex;
-        gap: 12px;
-        margin-top: 16px;
+        gap: 10px;
+        margin-top: 14px;
       }
       .btn-action {
         flex: 1;
-        padding: 12px;
+        padding: 10px 12px;
         border-radius: 10px;
-        border: none;
+        border: 1px solid var(--border-color);
         font-weight: 700;
-        font-size: 0.9rem;
+        font-size: 0.82rem;
         cursor: pointer;
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
         transition: all 0.2s ease;
+        background: var(--card-bg);
+        color: var(--text-main);
       }
       .btn-flash-on {
         background: linear-gradient(135deg, #f59e0b, #d97706);
         color: #000;
         box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
       }
-      .btn-flash-off {
-        background: var(--card-bg);
-        color: var(--text-main);
-        border: 1px solid var(--border-color);
-      }
       .btn-action:hover {
         transform: translateY(-2px);
         filter: brightness(1.1);
+      }
+
+      /* KONTROL SERVO ROBOT ARM */
+      .servo-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        margin-top: 12px;
+      }
+      .servo-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 12px 14px;
+      }
+      .servo-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        color: var(--text-sub);
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+      .servo-label span { color: var(--accent-blue); }
+      .servo-slider {
+        width: 100%;
+        accent-color: var(--accent-blue);
+        cursor: pointer;
       }
 
       .metrics-grid {
@@ -262,22 +274,10 @@
         align-items: center;
         font-size: 1.2rem;
       }
-      .icon-temp {
-        background: rgba(239, 68, 68, 0.15);
-        color: #f87171;
-      }
-      .icon-hum {
-        background: rgba(56, 189, 248, 0.15);
-        color: #38bdf8;
-      }
-      .icon-dist {
-        background: rgba(139, 92, 246, 0.15);
-        color: #a78bfa;
-      }
-      .icon-batt {
-        background: rgba(16, 185, 129, 0.15);
-        color: #34d399;
-      }
+      .icon-temp { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+      .icon-hum { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+      .icon-dist { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+      .icon-batt { background: rgba(16, 185, 129, 0.15); color: #34d399; }
       .metric-info .label {
         font-size: 0.75rem;
         color: var(--text-sub);
@@ -342,19 +342,10 @@
         border-collapse: collapse;
         margin-top: 12px;
       }
-      .info-table tr {
-        border-bottom: 1px solid var(--border-color);
-      }
-      .info-table tr:last-child {
-        border-bottom: none;
-      }
-      .info-table td {
-        padding: 10px 0;
-        font-size: 0.85rem;
-      }
-      .info-table td.td-label {
-        color: var(--text-sub);
-      }
+      .info-table tr { border-bottom: 1px solid var(--border-color); }
+      .info-table tr:last-child { border-bottom: none; }
+      .info-table td { padding: 10px 0; font-size: 0.85rem; }
+      .info-table td.td-label { color: var(--text-sub); }
       .info-table td.td-val {
         text-align: right;
         font-weight: 600;
@@ -376,7 +367,7 @@
         <div class="brand-icon"><i class="fa-solid fa-leaf"></i></div>
         <div class="brand-title">
           <h1>AGRI-VISION AI DASHBOARD</h1>
-          <p>Sistem IoT Dual-ESP32 Monitoring & Diagnosa Penyakit Daun Cabai</p>
+          <p>Sistem IoT Dual-ESP32 Monitoring & Kontrol Robot Arm</p>
         </div>
       </div>
       <div class="nav-status">
@@ -389,31 +380,73 @@
 
     <!-- MAIN DASHBOARD GRID -->
     <div class="dashboard-grid">
-      <!-- LEFT COLUMN -->
-      <div class="panel-card">
-        <div class="panel-header">
-          <div class="panel-title">
-            <i class="fa-solid fa-video"></i> Live Visual Stream (ESP32-CAM)
+      <!-- LEFT COLUMN: STREAM & ROBOT ARM -->
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <!-- VISUAL PANEL -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title">
+              <i class="fa-solid fa-video"></i> Live Visual Stream (ESP32-CAM)
+            </div>
+            <span id="modeTag" class="tag-chip">Mode: Predict AI</span>
           </div>
-          <span class="tag-chip">QVGA 320x240 | 10 FPS</span>
+
+          <div class="video-container">
+            <div class="camera-overlay">
+              <i class="fa-solid fa-camera"></i> Node 1: ESP32-CAM OV2640
+            </div>
+            <img id="streamImg" src="" alt="Menghubungkan Stream Kamera..." />
+          </div>
+
+          <!-- DUAL CONTROL BUTTONS -->
+          <div class="camera-controls">
+            <button
+              id="flashBtn"
+              class="btn-action"
+              onclick="toggleFlash()"
+            >
+              <i class="fa-solid fa-lightbulb"></i>
+              <span id="btnText">Flash: OFF</span>
+            </button>
+            <button class="btn-action" onclick="setCameraMode('predict')" id="btnModePredict">
+              <i class="fa-solid fa-brain"></i> AI Predict
+            </button>
+            <button class="btn-action" onclick="setCameraMode('cctv')" id="btnModeCCTV">
+              <i class="fa-solid fa-bolt"></i> CCTV Fast
+            </button>
+            <button class="btn-action" onclick="setCameraMode('off')" id="btnModeOFF">
+              <i class="fa-solid fa-power-off"></i> Kamera OFF
+            </button>
+          </div>
         </div>
 
-        <div class="video-container">
-          <div class="camera-overlay">
-            <i class="fa-solid fa-camera"></i> Node 1: ESP32-CAM OV2640
+        <!-- ROBOT ARM CONTROL PANEL -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title">
+              <i class="fa-solid fa-robot"></i> Kontrol Lengan Robot (4 Servo)
+            </div>
+            <span class="tag-chip">I2C / PCA9685 Driver</span>
           </div>
-          <img id="streamImg" src="" alt="Menghubungkan Stream Kamera..." />
-        </div>
 
-        <div class="camera-controls">
-          <button
-            id="flashBtn"
-            class="btn-action btn-flash-off"
-            onclick="toggleFlash()"
-          >
-            <i class="fa-solid fa-lightbulb"></i>
-            <span id="btnText">Lampu Flash: MEMUAT...</span>
-          </button>
+          <div class="servo-grid">
+            <div class="servo-card">
+              <div class="servo-label">Base (Poros): <span id="valBase">90°</span></div>
+              <input type="range" class="servo-slider" id="sliderBase" min="0" max="180" value="90" oninput="updateServo('Base', this.value)">
+            </div>
+            <div class="servo-card">
+              <div class="servo-label">Shoulder (Bahu): <span id="valShoulder">90°</span></div>
+              <input type="range" class="servo-slider" id="sliderShoulder" min="0" max="180" value="90" oninput="updateServo('Shoulder', this.value)">
+            </div>
+            <div class="servo-card">
+              <div class="servo-label">Elbow (Siku): <span id="valElbow">90°</span></div>
+              <input type="range" class="servo-slider" id="sliderElbow" min="0" max="180" value="90" oninput="updateServo('Elbow', this.value)">
+            </div>
+            <div class="servo-card">
+              <div class="servo-label">Gripper (Jepit): <span id="valGripper">90°</span></div>
+              <input type="range" class="servo-slider" id="sliderGripper" min="0" max="180" value="90" oninput="updateServo('Gripper', this.value)">
+            </div>
+          </div>
         </div>
 
         <!-- HARDWARE SENSOR METRICS -->
@@ -460,7 +493,7 @@
         </div>
       </div>
 
-      <!-- RIGHT COLUMN -->
+      <!-- RIGHT COLUMN: AI DIAGNOSTICS & TELEMETRY -->
       <div style="display: flex; flex-direction: column; gap: 24px">
         <!-- AI DIAGNOSTIC CARD -->
         <div class="panel-card">
@@ -510,14 +543,14 @@
               <td class="td-label">
                 <i class="fa-solid fa-server"></i> REST API Endpoint
               </td>
-              <td class="td-val">/predict (POST)</td>
+              <td class="td-val">/predict & /set-servo</td>
             </tr>
             <tr>
               <td class="td-label">
-                <i class="fa-solid fa-clock"></i> Latensi Pengiriman
+                <i class="fa-solid fa-clock"></i> Latensi Stream CCTV
               </td>
               <td class="td-val">
-                <span style="color: var(--accent-green)">~100 ms</span>
+                <span style="color: var(--accent-green)">~30 ms</span>
               </td>
             </tr>
           </table>
@@ -527,17 +560,13 @@
         <div class="panel-card" style="flex: 1">
           <div class="panel-header">
             <div class="panel-title">
-              <i class="fa-solid fa-circle-info"></i> Arsitektur Sistem
-              Dual-Node
+              <i class="fa-solid fa-circle-info"></i> Arsitektur Sistem Dual-Node
             </div>
           </div>
-          <p
-            style="font-size: 0.85rem; color: var(--text-sub); line-height: 1.6"
-          >
+          <p style="font-size: 0.85rem; color: var(--text-sub); line-height: 1.6">
             Beban komputasi dibagi secara efisien: Node ESP32-CAM menangani
             *frame capture* & transmisi Wi-Fi, sedangkan Node ESP32 DevKit
-            menangani pengukuran sensor mikro iklim (Suhu, Kelembaban, Jarak)
-            serta rendering informasi pada Dual-OLED.
+            menangani pengukuran sensor iklim mikro, kontrol PWM 4-servo robot arm, serta rendering informasi pada Dual-OLED.
           </p>
         </div>
       </div>
@@ -548,6 +577,7 @@
       const API_BASE_URL = "https://swooned-brigade-ludicrous.ngrok-free.dev";
 
       const imgElement = document.getElementById("streamImg");
+      let servoDebounceTimer = null;
 
       // Reload Stream Visual dengan Header Bypass Peringatan Ngrok
       async function reloadImage() {
@@ -556,22 +586,21 @@
             API_BASE_URL + "/video_feed?t=" + new Date().getTime(),
             {
               headers: {
-                "ngrok-skip-browser-warning": "true",
-              },
-            },
+                "ngrok-skip-browser-warning": "true"
+              }
+            }
           );
 
           if (!response.ok) throw new Error("Gagal mengambil frame gambar");
 
           const blob = await response.blob();
 
-          // Bebaskan memori URL Blob lama
           if (imgElement.src && imgElement.src.startsWith("blob:")) {
             URL.revokeObjectURL(imgElement.src);
           }
 
           imgElement.src = URL.createObjectURL(blob);
-          setTimeout(reloadImage, 100);
+          setTimeout(reloadImage, 80);
         } catch (err) {
           console.error("Video feed error:", err);
           setTimeout(reloadImage, 1000);
@@ -583,8 +612,8 @@
         try {
           let res = await fetch(`${API_BASE_URL}/get-flash`, {
             headers: {
-              "ngrok-skip-browser-warning": "true",
-            },
+              "ngrok-skip-browser-warning": "true"
+            }
           });
           let data = await res.json();
 
@@ -596,35 +625,42 @@
           document.getElementById("akurasiText").innerText = akurasi;
 
           // Update Telemetri Sensor dari DevKit
-          document.getElementById("valTemp").innerText =
-            (data.temp || "--") + " °C";
-          document.getElementById("valHum").innerText =
-            (data.hum || "--") + " %";
-          document.getElementById("valDist").innerText =
-            (data.dist || "--") + " cm";
+          document.getElementById("valTemp").innerText = (data.temp || "--") + " °C";
+          document.getElementById("valHum").innerText  = (data.hum || "--") + " %";
+          document.getElementById("valDist").innerText = (data.dist || "--") + " cm";
 
           // Progress Bar Akurasi
           const numAccuracy = parseFloat(akurasi.replace("%", "")) || 0;
-          document.getElementById("accuracyBar").style.width =
-            numAccuracy + "%";
+          document.getElementById("accuracyBar").style.width = numAccuracy + "%";
 
-          // Status Badge
+          // Status Badge Connection
           const badge = document.getElementById("statusBadge");
           const badgeText = document.getElementById("statusText");
           badge.classList.remove("offline");
           badgeText.innerText = "Sistem Terhubung";
 
-          // Flash Button
+          // Status Flash Button
           const btn = document.getElementById("flashBtn");
           const btnText = document.getElementById("btnText");
-
           if (data.flash) {
-            btnText.innerText = "Lampu Flash: ON 💡";
+            btnText.innerText = "Flash: ON 💡";
             btn.className = "btn-action btn-flash-on";
           } else {
-            btnText.innerText = "Lampu Flash: OFF 🌙";
-            btn.className = "btn-action btn-flash-off";
+            btnText.innerText = "Flash: OFF 🌙";
+            btn.className = "btn-action";
           }
+
+          // Highlight Status Mode Kamera
+          const mode = data.mode || "predict";
+          document.getElementById("btnModePredict").style.border = (mode === "predict") ? "2px solid #10b981" : "1px solid var(--border-color)";
+          document.getElementById("btnModeCCTV").style.border    = (mode === "cctv") ? "2px solid #38bdf8" : "1px solid var(--border-color)";
+          document.getElementById("btnModeOFF").style.border     = (mode === "off") ? "2px solid #ef4444" : "1px solid var(--border-color)";
+          
+          const modeTag = document.getElementById("modeTag");
+          if (mode === "predict") modeTag.innerText = "Mode: AI Predict (QVGA)";
+          else if (mode === "cctv") modeTag.innerText = "Mode: CCTV Fast (QQVGA)";
+          else modeTag.innerText = "Mode: Kamera Nonaktif (OFF)";
+
         } catch (err) {
           const badge = document.getElementById("statusBadge");
           const badgeText = document.getElementById("statusText");
@@ -634,19 +670,60 @@
         }
       }
 
-      // Tombol Kontrol Flash
+      // Ganti Mode Kamera (Predict / CCTV / OFF)
+      async function setCameraMode(mode) {
+        try {
+          let formData = new FormData();
+          formData.append("mode", mode);
+
+          await fetch(`${API_BASE_URL}/set-camera-mode`, {
+            method: "POST",
+            headers: { "ngrok-skip-browser-warning": "true" },
+            body: formData
+          });
+          fetchStatus();
+        } catch (err) {
+          console.error("Gagal mengganti mode kamera:", err);
+        }
+      }
+
+      // Toggle Lampu Flash
       async function toggleFlash() {
         try {
           await fetch(`${API_BASE_URL}/toggle-flash`, {
             method: "POST",
             headers: {
-              "ngrok-skip-browser-warning": "true",
-            },
+              "ngrok-skip-browser-warning": "true"
+            }
           });
           fetchStatus();
         } catch (err) {
           console.error("Gagal mengubah status flash:", err);
         }
+      }
+
+      // Update Slider Servo dengan Debounce
+      function updateServo(name, val) {
+        document.getElementById(`val${name}`).innerText = val + "°";
+
+        clearTimeout(servoDebounceTimer);
+        servoDebounceTimer = setTimeout(async () => {
+          try {
+            let formData = new FormData();
+            formData.append("base", document.getElementById("sliderBase").value);
+            formData.append("shoulder", document.getElementById("sliderShoulder").value);
+            formData.append("elbow", document.getElementById("sliderElbow").value);
+            formData.append("gripper", document.getElementById("sliderGripper").value);
+
+            await fetch(`${API_BASE_URL}/set-servo`, {
+              method: "POST",
+              headers: { "ngrok-skip-browser-warning": "true" },
+              body: formData
+            });
+          } catch (err) {
+            console.error("Gagal mengupdate posisi servo:", err);
+          }
+        }, 50);
       }
 
       // Inisialisasi awal
