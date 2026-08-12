@@ -222,7 +222,6 @@
         filter: brightness(1.1);
       }
 
-      /* KONTROL SERVO ROBOT ARM */
       .servo-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -664,19 +663,11 @@
         }
       }
 
-      // Ganti Mode Kamera (Predict / CCTV / OFF) - Memakai URLSearchParams
+      // Ganti Mode Kamera via GET Request
       async function setCameraMode(mode) {
         try {
-          let params = new URLSearchParams();
-          params.append("mode", mode);
-
-          await fetch(`${API_BASE_URL}/set-camera-mode`, {
-            method: "POST",
-            headers: { 
-              "ngrok-skip-browser-warning": "true",
-              "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: params
+          await fetch(`${API_BASE_URL}/set-camera-mode?mode=${mode}`, {
+            headers: { "ngrok-skip-browser-warning": "true" }
           });
           fetchStatus();
         } catch (err) {
@@ -699,26 +690,20 @@
         }
       }
 
-      // Update Slider Servo dengan Debounce & URLSearchParams
+      // Update Slider Servo via GET Request
       function updateServo(name, val) {
         document.getElementById(`val${name}`).innerText = val + "°";
 
         clearTimeout(servoDebounceTimer);
         servoDebounceTimer = setTimeout(async () => {
           try {
-            let params = new URLSearchParams();
-            params.append("base", document.getElementById("sliderBase").value);
-            params.append("shoulder", document.getElementById("sliderShoulder").value);
-            params.append("elbow", document.getElementById("sliderElbow").value);
-            params.append("gripper", document.getElementById("sliderGripper").value);
+            const b = document.getElementById("sliderBase").value;
+            const s = document.getElementById("sliderShoulder").value;
+            const e = document.getElementById("sliderElbow").value;
+            const g = document.getElementById("sliderGripper").value;
 
-            await fetch(`${API_BASE_URL}/set-servo`, {
-              method: "POST",
-              headers: { 
-                "ngrok-skip-browser-warning": "true",
-                "Content-Type": "application/x-www-form-urlencoded"
-              },
-              body: params
+            await fetch(`${API_BASE_URL}/set-servo?base=${b}&shoulder=${s}&elbow=${e}&gripper=${g}`, {
+              headers: { "ngrok-skip-browser-warning": "true" }
             });
           } catch (err) {
             console.error("Gagal mengupdate posisi servo:", err);
